@@ -1,0 +1,42 @@
+-- Get the necessary services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local hitboxSize = 50
+local espEnabled = true
+
+-- Function to expand and make hitboxes visible
+local function expandHitboxes()
+for _, player in pairs(Players:GetPlayers()) do
+if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+local hitbox = player.Character.HumanoidRootPart
+hitbox.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
+hitbox.Transparency = 0.5
+hitbox.BrickColor = BrickColor.new("Bright red") -- Make hitbox visible
+hitbox.Material = Enum.Material.Neon
+hitbox.CanCollide = false
+end
+end
+end
+
+-- Function to create ESP for all players
+local function createESP()
+for _, player in pairs(Players:GetPlayers()) do
+if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+local highlight = Instance.new("Highlight")
+highlight.Adornee = player.Character
+highlight.FillColor = Color3.fromRGB(0, 255, 0)
+highlight.FillTransparency = 0.5
+highlight.OutlineTransparency = 0
+highlight.Parent = player.Character
+end
+end
+end
+
+-- Continuously expand hitboxes, make them visible, and add ESP
+RunService.RenderStepped:Connect(function()
+expandHitboxes()
+if espEnabled then
+createESP()
+end
+end)
